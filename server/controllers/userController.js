@@ -3,18 +3,19 @@ import bcrpt from 'bcrypt';
 import db from '../models';
 
 const userDB = db.User;
-
-// require('dotenv').config()
+require('dotenv').config()
 
 const Secret = process.env.SECRET;
 
 class User {
   static signup(req, res) {
-    userDB
-      .create({
+      
+       const data = req.body.password;
+    bcrypt.hash(data, 10)
+      .then(hash => userDB.create({
         fullname: req.body.fullname, 
         email: req.body.email, 
-        password: req.body.password, 
+        password: hash, 
         confirmPassword: req.body.confirmPassword,
         role: req.body.role
       })
